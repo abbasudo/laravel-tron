@@ -27,8 +27,8 @@ class Tron extends TronBase
         $this->full($fullNode ?? config('tron.host.full'));
         $this->solidity($solidityNode ?? config('tron.host.solidity'));
         $this->event($eventServer ?? config('tron.host.event'));
-        $signServer && $this->sign($signServer);
-        $privateKey && $this->setPrivateKey($privateKey);
+        $this->sign($signServer ?? config('tron.host.sign'));
+        $this->setPrivateKey($privateKey ?? config('tron.wallet.private_key'));
 
         $this->setManager(
             new TronManager($this, [
@@ -57,10 +57,14 @@ class Tron extends TronBase
      */
     public function httpClient(string $host): HttpProvider
     {
-        return new HttpProvider($host, 30000, false, false, [
-            'Content-Type'     => 'application/json',
-            'TRON-PRO-API-KEY' => config('tron.key'),
-        ]);
+        $headers = [
+            'Content-Type' => 'application/json',
+        ];
+        if (config('tron.key') !== null) {
+            $headers['TRON-PRO-API-KEY'] = config('tron.key');
+        }
+
+        return new HttpProvider($host, 30000, false, false, $headers);
     }
 
     /**
