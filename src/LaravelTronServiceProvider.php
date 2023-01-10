@@ -13,11 +13,9 @@ class LaravelTronServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind('Tron', function ($app) {
+        $this->app->singleton('Tron', function ($app) {
             return new Tron();
         });
-
-        $this->mergeConfigFrom(__DIR__.'/../config/tron.php', 'tron');
     }
 
     /**
