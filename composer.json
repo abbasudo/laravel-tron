@@ -1,0 +1,35 @@
+{
+  "name": "llabbasmkhll/laravel-tron",
+  "description": "integrate your laravel app with tron",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "abbas mkhzomi",
+      "email": "llabbasmkhll@gmail.com",
+      "role": "developer"
+    }
+  ],
+  "require": {
+    "php": "8.*",
+    "laravel/framework": "8.*|9.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Llabbasmkhll\\LaravelTron\\": "src"
+    }
+  },
+  "require-dev": {
+    "orchestra/testbench": "6.0"
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Llabbasmkhll\\LaravelTron\\LaravelTronServiceProvider"
+      ],
+      "aliases": {
+        "Tron": "Llabbasmkhll\\LaravelTron\\Facades\\Tron"
+      }
+    }
+  }
+}
