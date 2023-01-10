@@ -16,6 +16,8 @@ class LaravelTronServiceProvider extends ServiceProvider
         $this->app->bind('Tron', function ($app) {
             return new Tron();
         });
+
+        $this->mergeConfigFrom(__DIR__.'/../config/tron.php', 'tron');
     }
 
     /**
@@ -23,6 +25,10 @@ class LaravelTronServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        if ($this->app->runningInConsole()) {
+            $this->publishes([
+                __DIR__.'/../config/tron.php' => config_path('tron.php'),
+            ], 'tron-config');
+        }
     }
 }
