@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5607cda05176a58ccec3173c315b9955",
+    "content-hash": "160845ebe35e285879d5e07d58e91574",
     "packages": [
         {
             "name": "brick/math",
@@ -1574,16 +1574,16 @@
         },
         {
             "name": "llabbasmkhll/tron-api",
-            "version": "v1.0.2",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/llabbasmkhll/tron-api.git",
-                "reference": "042d819928f549ccc6d806d2a148c78244efabb3"
+                "reference": "83dc7b9f2fe66c3fd101aa55cc3bf32a9dae1d31"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/llabbasmkhll/tron-api/zipball/042d819928f549ccc6d806d2a148c78244efabb3",
-                "reference": "042d819928f549ccc6d806d2a148c78244efabb3",
+                "url": "https://api.github.com/repos/llabbasmkhll/tron-api/zipball/83dc7b9f2fe66c3fd101aa55cc3bf32a9dae1d31",
+                "reference": "83dc7b9f2fe66c3fd101aa55cc3bf32a9dae1d31",
                 "shasum": ""
             },
             "require": {
@@ -1598,6 +1598,7 @@
             "require-dev": {
                 "phpunit/phpunit": "^6.0|^7.0|^8.0|^9.0"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -1610,9 +1611,9 @@
             ],
             "description": "A PHP API for interacting with Tron (Trx)",
             "support": {
-                "source": "https://github.com/llabbasmkhll/tron-api/tree/v1.0.2"
+                "source": "https://github.com/llabbasmkhll/tron-api/tree/master"
             },
-            "time": "2023-01-10T23:02:24+00:00"
+            "time": "2023-01-12T22:52:08+00:00"
         },
         {
             "name": "mdanter/ecc",
@@ -2785,16 +2786,16 @@
         },
         {
             "name": "ramsey/uuid",
-            "version": "4.7.1",
+            "version": "4.7.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ramsey/uuid.git",
-                "reference": "a1acf96007170234a8399586a6e2ab8feba109d1"
+                "reference": "433b2014e3979047db08a17a205f410ba3869cf2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ramsey/uuid/zipball/a1acf96007170234a8399586a6e2ab8feba109d1",
-                "reference": "a1acf96007170234a8399586a6e2ab8feba109d1",
+                "url": "https://api.github.com/repos/ramsey/uuid/zipball/433b2014e3979047db08a17a205f410ba3869cf2",
+                "reference": "433b2014e3979047db08a17a205f410ba3869cf2",
                 "shasum": ""
             },
             "require": {
@@ -2861,7 +2862,7 @@
             ],
             "support": {
                 "issues": "https://github.com/ramsey/uuid/issues",
-                "source": "https://github.com/ramsey/uuid/tree/4.7.1"
+                "source": "https://github.com/ramsey/uuid/tree/4.7.3"
             },
             "funding": [
                 {
@@ -2873,7 +2874,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-12-31T22:20:34+00:00"
+            "time": "2023-01-12T18:13:24+00:00"
         },
         {
             "name": "simplito/bigint-wrapper-php",
@@ -7695,7 +7696,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "llabbasmkhll/tron-api": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

@@ -13,7 +13,7 @@
   "require": {
     "php": "8.*",
     "laravel/framework": "8.*|9.*",
-    "llabbasmkhll/tron-api": "^1.0"
+    "llabbasmkhll/tron-api": "dev-master"
   },
   "autoload": {
     "psr-4": {
