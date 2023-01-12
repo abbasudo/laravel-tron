@@ -2,12 +2,12 @@
 
 namespace Llabbasmkhll\LaravelTron\Providers;
 
-use IEXBase\TronAPI\Provider\HttpProviderInterface;
-use Illuminate\Support\Facades\Cache;
-use GuzzleHttp\{Psr7\Request, Client, ClientInterface};
-use Psr\Http\Message\StreamInterface;
+use GuzzleHttp\{Client, ClientInterface, Psr7\Request};
 use IEXBase\TronAPI\Exception\{NotFoundException, TronException};
+use IEXBase\TronAPI\Provider\HttpProviderInterface;
 use IEXBase\TronAPI\Support\Utils;
+use Illuminate\Support\Facades\Cache;
+use Psr\Http\Message\StreamInterface;
 
 class HttpProvider implements HttpProviderInterface
 {
@@ -58,12 +58,15 @@ class HttpProvider implements HttpProviderInterface
      *
      * @throws \IEXBase\TronAPI\Exception\TronException
      */
-    public function __construct(string $host, int $timeout = 30000,
+    public function __construct(
+        string $host,
+        int $timeout = 30000,
         bool $user = false,
         bool $password = false,
-        array $headers = [], string $statusPage = '/')
-    {
-        if (!Utils::isValidUrl($host)) {
+        array $headers = [],
+        string $statusPage = '/'
+    ) {
+        if ( ! Utils::isValidUrl($host)) {
             throw new TronException('Invalid URL provided to HttpProvider');
         }
 
@@ -71,26 +74,26 @@ class HttpProvider implements HttpProviderInterface
             throw new TronException('Invalid timeout duration provided');
         }
 
-        if (!Utils::isArray($headers)) {
+        if ( ! Utils::isArray($headers)) {
             throw new TronException('Invalid headers array provided');
         }
 
-        $this->host = $host;
-        $this->timeout = $timeout;
+        $this->host       = $host;
+        $this->timeout    = $timeout;
         $this->statusPage = $statusPage;
-        $this->headers = $headers;
+        $this->headers    = $headers;
 
         $this->httpClient = new Client([
             'base_uri' => $host,
             'timeout'  => $timeout,
-            'auth'     => $user && [$user, $password]
+            'auth'     => $user && [$user, $password],
         ]);
     }
 
     /**
      * Enter a new page
      *
-     * @param string $page
+     * @param  string  $page
      */
     public function setStatusPage(string $page = '/'): void
     {
@@ -112,27 +115,8 @@ class HttpProvider implements HttpProviderInterface
         } elseif (array_key_exists('status', $response)) {
             return true;
         }
+
         return false;
-    }
-
-    /**
-     * Getting a host
-     *
-     * @return string
-     */
-    public function getHost(): string
-    {
-        return $this->host;
-    }
-
-    /**
-     * Getting timeout
-     *
-     * @return int
-     */
-    public function getTimeout(): int
-    {
-        return $this->timeout;
     }
 
     /**
@@ -146,26 +130,31 @@ class HttpProvider implements HttpProviderInterface
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \IEXBase\TronAPI\Exception\TronException
      */
-    public function request($url, array $payload = [], string $method = 'get'): array
+    public function request($url, array $payload = [], string $method = 'GET'): array
     {
         $method = strtoupper($method);
 
-        if (!in_array($method, ['GET', 'POST'])) {
+        if ( ! in_array($method, ['GET', 'POST'])) {
             throw new TronException('The method is not defined');
         }
 
         $time = time();
-        Cache::forget('tron_api_limit:' . ($time - 1));
-        if (!empty(config('tron.key')) && Cache::increment('tron_api_limit:' . $time) > 15) {
+        Cache::forget('tron_api_limit:'.($time - 1));
+        if ( ! empty(config('tron.key')) && Cache::increment('tron_api_limit:'.$time) > 15) {
             throw new TronException('The api access limit reached');
         }
 
         $options = [
             'headers' => $this->headers,
-            'body'    => json_encode($payload)
         ];
 
-        $request = new Request($method, $url, $options['headers'], $options['body']);
+        if ($method === 'GET') {
+            $options['query'] = $payload;
+        } elseif ($method === 'POST') {
+            $options['body'] = json_encode($payload);
+        }
+
+        $request     = new Request($method, $url, $options['headers'], $options['body'] ?? null);
         $rawResponse = $this->httpClient->send($request, $options);
 
         return $this->decodeBody(
@@ -188,9 +177,9 @@ class HttpProvider implements HttpProviderInterface
 
         if ((string)$stream == 'OK') {
             $decodedBody = [
-                'status' => 1
+                'status' => 1,
             ];
-        } elseif ($decodedBody == null or !is_array($decodedBody)) {
+        } elseif ($decodedBody == null or ! is_array($decodedBody)) {
             $decodedBody = [];
         }
 
@@ -199,5 +188,25 @@ class HttpProvider implements HttpProviderInterface
         }
 
         return $decodedBody;
+    }
+
+    /**
+     * Getting a host
+     *
+     * @return string
+     */
+    public function getHost(): string
+    {
+        return $this->host;
+    }
+
+    /**
+     * Getting timeout
+     *
+     * @return int
+     */
+    public function getTimeout(): int
+    {
+        return $this->timeout;
     }
 }

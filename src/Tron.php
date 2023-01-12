@@ -7,6 +7,7 @@ use IEXBase\TronAPI\TransactionBuilder;
 use IEXBase\TronAPI\Tron as TronBase;
 use IEXBase\TronAPI\TronAddress;
 use IEXBase\TronAPI\TronManager;
+use IEXBase\TronAPI\TronScan;
 use Llabbasmkhll\LaravelTron\Providers\HttpProvider;
 
 class Tron extends TronBase
@@ -16,6 +17,7 @@ class Tron extends TronBase
     private HttpProvider $eventServer;
     private HttpProvider $signServer;
     private HttpProvider $fullNode;
+    private HttpProvider $explorer;
 
     public function __construct(
         $fullNode = null,
@@ -28,6 +30,7 @@ class Tron extends TronBase
         $this->solidity($solidityNode ?? config('tron.host.solidity'));
         $this->event($eventServer ?? config('tron.host.event'));
         $this->sign($signServer ?? config('tron.host.sign'));
+        $this->explorer($signServer ?? config('tron.host.scan'));
         $this->setPrivateKey($privateKey ?? config('tron.wallet.private_key'));
 
         $this->setManager(
@@ -38,6 +41,8 @@ class Tron extends TronBase
                 'signServer'   => $this->signServer,
             ])
         );
+
+        $this->setScan(new TronScan($this->explorer));
 
         $this->transactionBuilder = new TransactionBuilder($this);
     }
@@ -73,6 +78,16 @@ class Tron extends TronBase
     public function solidity(string $solidityNode): static
     {
         $this->solidityNode = $this->httpClient($solidityNode);
+
+        return $this;
+    }
+
+    /**
+     * @throws \IEXBase\TronAPI\Exception\TronException
+     */
+    public function explorer(string $explorer): static
+    {
+        $this->explorer = $this->httpClient($explorer);
 
         return $this;
     }
